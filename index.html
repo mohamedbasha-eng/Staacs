@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staccs || ستآكس - Redefining Everyday Elegance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <!-- Firebase SDK is now natively imported via ES Modules inside JS files -->
+</head>
+
+<body>
+  <header class="header">
+    <nav class="nav">
+      <div class="nav-brand">
+        <a href="#home" style="text-decoration: none;">
+          <img src="logo.png" alt="staccs.eg" class="header-logo">
+        </a>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="#" id="cart-link">Cart <span id="cart-count">(0)</span> | Orders <span
+              id="orders-count">(0)</span></a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="sun">☀️</span>
+        <span class="moon">🌙</span>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero" data-animate>
+      <div class="hero-content">
+        <h2 class="hero-title">Redefine Everyday <br> Elegance</h2>
+        <p class="hero-desc">Modern accessories crafted from high-grade, rust-resistant stainless steel. Enhance your
+          personality with minimalist luxury.</p>
+        <a href="#collections" class="cta-btn">Explore Collections</a>
+      </div>
+      <div class="hero-image" data-animate>
+        <img src="hero-image.png" alt="Staccs Premium Accessories" class="hero-img">
+      </div>
+    </section>
+
+    <section id="about" class="about section" data-animate>
+      <div class="container">
+        <h2>Our Vision</h2>
+        <p>Staccs redefines elegance for men and women with contemporary, minimalist designs. Our dark aesthetic product
+          photography conveys luxury and professionalism.</p>
+        <p>The website offers seamless navigation and clarity in showcasing our premium stainless steel pieces.</p>
+      </div>
+    </section>
+
+    <section id="features" class="features section">
+      <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-animate>
+            <div class="feature-icon">🔒</div>
+            <h3>Premium Material</h3>
+            <p>Corrosion-resistant stainless steel that never fades.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <div class="feature-icon">✨</div>
+            <h3>Customization</h3>
+            <p>Personalized engraving for unique, meaningful pieces.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <div class="feature-icon">📦</div>
+            <h3>Premium Packaging</h3>
+            <p>Gift-ready unboxing experience reflecting our quality.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <div class="feature-icon">🚚</div>
+            <h3>Fast Shipping</h3>
+            <p>24-72 hours across all Egyptian governorates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections" class="collections section">
+      <div class="container">
+        <h2 class="section-title">Our Collections</h2>
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="Necklaces">Necklaces</button>
+          <button class="category-tab" data-category="Rings">Rings</button>
+          <button class="category-tab" data-category="Bracelets">Bracelets</button>
+          <button class="category-tab" data-category="Watches">Watches</button>
+        </div>
+        <div id="products-container" class="products-grid"></div>
+      </div>
+    </section>
+
+    <section id="track-order" class="track-order section" data-animate>
+      <div class="container">
+        <h2 class="section-title">Track Your Order</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Enter your mobile number to
+          check the latest status of your order.</p>
+
+        <div class="track-form-container">
+          <div class="track-input-group">
+            <input type="tel" id="track-phone" placeholder="Enter your mobile number (e.g. 010...)" class="track-input">
+            <button id="track-btn" class="cta-btn track-btn">Track Order</button>
+          </div>
+          <div id="track-result" class="track-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section" data-animate>
+      <div class="container">
+        <h2>Get in Touch</h2>
+        <div id="contact-links-container" class="contact-grid">
+          <!-- Dynamic links loaded from Firebase -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-logo">
+        <img src="logo.png" alt="staccs.eg" style="height: 80px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
+      </div>
+      <div id="footer-social-links" class="footer-social">
+        <!-- Dynamic links loaded from Firebase -->
+      </div>
+      <p class="footer-copyright">&copy; 2024 staccs.eg. All rights reserved. | Prepared by Eng Mohamed Basha</p>
+    </div>
+  </footer>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-content">
+      <span class="close">&times;</span>
+      <h2>Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total">
+        <strong>Subtotal: <span id="cart-subtotal">0</span> EGP</strong>
+      </div>
+      <div class="cart-total">
+        <strong>Shipping Cost: <span id="shipping-cost">0</span> EGP</strong>
+      </div>
+      <div class="cart-total">
+        <strong>Discount: <span id="discount-value">0</span> EGP</strong>
+      </div>
+      <div class="cart-total" style="font-size: 1.2rem; margin-top: 0.4rem;">
+        <strong>Total: <span id="total-value">0</span> EGP</strong>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- Row 1: Name and Phone -->
+        <div class="checkout-row">
+          <div class="input-group">
+            <label for="customer-name">Name</label>
+            <input id="customer-name" type="text" placeholder="Full Name">
+          </div>
+          <div class="input-group">
+            <label for="customer-phone">Phone</label>
+            <input id="customer-phone" type="tel" placeholder="Phone Number">
+          </div>
+        </div>
+
+        <!-- Row 2: Address -->
+        <div class="input-group">
+          <label for="customer-address">Address</label>
+          <input id="customer-address" type="text" placeholder="Full Address">
+        </div>
+
+        <!-- Row 3: Governorate and Voucher -->
+        <div class="checkout-row">
+          <div class="input-group">
+            <label for="governorate">Governorate</label>
+            <select id="governorate">
+              <option value="">Choose Governorate</option>
+              <option value="Cairo">Cairo (القاهرة)</option>
+              <option value="Giza">Giza (الجيزة)</option>
+              <option value="Alexandria">Alexandria (الإسكندرية)</option>
+              <option value="Ismailia">Ismailia (الإسماعيلية)</option>
+              <option value="Port Said">Port Said (بورسعيد)</option>
+              <option value="Suez">Suez (السويس)</option>
+              <option value="Delta">Delta Region (الدلتا)</option>
+              <option value="Fayoum">Fayoum (الفيوم)</option>
+              <option value="Upper Egypt">Upper Egypt (الصعيد)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="voucher-code">Voucher Code</label>
+            <div class="voucher-input-group">
+              <input id="voucher-code" type="text" placeholder="e.g. STACCS10">
+              <button id="apply-voucher-btn" class="cta-btn voucher-btn">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="place-order-btn" class="cta-btn place-order-btn">Place Order</button>
+    </div>
+  </div>
+
+  <script type="module" src="cart.js"></script>
+  <script type="module" src="js/script.js"></script>
+</body>
+
+</html>

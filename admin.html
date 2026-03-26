@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<!-- Hello Eng Mohamed Basha -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staccs Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 5rem auto;
+      padding: 3rem;
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .login-container h1 {
+      margin-bottom: 2rem;
+      color: var(--accent);
+      font-size: 2rem;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .login-form input {
+      padding: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .login-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(201, 169, 94, 0.3);
+    }
+
+    .login-btn {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 25px rgba(201, 169, 94, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .error-message {
+      color: #e74c3c;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .admin-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+      display: none;
+    }
+
+    .admin-container.logged-in {
+      display: block;
+    }
+
+    .product-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .product-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .product-item {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .delete {
+      background: #e74c3c;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      margin-top: 1rem;
+    }
+
+    .logout-btn:hover {
+      box-shadow: 0 10px 25px rgba(231, 76, 60, 0.4);
+    }
+
+    .admin-dashboard {
+      display: none;
+    }
+
+    .admin-dashboard.logged-in {
+      display: block;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-header h1 {
+      color: var(--accent);
+      font-size: 2rem;
+    }
+
+    .stats-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0 3rem 0;
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.8rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border: 2px solid;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .stats-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, currentColor, transparent);
+    }
+
+    .stats-card-revenue {
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .stats-card-revenue .stats-card-icon {
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .stats-card-orders {
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+
+    .stats-card-orders .stats-card-icon {
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .stats-card-products {
+      border-color: #f59e0b;
+      color: #f59e0b;
+    }
+
+    .stats-card-products .stats-card-icon {
+      background: rgba(245, 158, 11, 0.15);
+    }
+
+    .stats-card-rate {
+      border-color: #8b5cf6;
+      color: #8b5cf6;
+    }
+
+    .stats-card-rate .stats-card-icon {
+      background: rgba(139, 92, 246, 0.15);
+    }
+
+    .stats-card-icon {
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .stats-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .stats-card-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+
+    .stats-card-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: currentColor;
+      letter-spacing: -0.5px;
+    }
+
+    .stats-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .stats-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 1.5rem 0 2rem 0;
+      }
+
+      .stats-card {
+        padding: 1.2rem;
+        gap: 0.8rem;
+      }
+
+      .stats-card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+      }
+
+      .stats-card-value {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* Toast Notification Styles */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 350px;
+    }
+
+    .toast {
+      background: white;
+      border-left: 5px solid #10b981;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 4.7s forwards;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 300px;
+    }
+
+    .toast-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      color: #065f46;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .toast-message {
+      color: #0f766e;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .toast-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+
+      .toast {
+        min-width: auto;
+      }
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .menu-item {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 15px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-8px) scale(1.05);
+      background: var(--bg-tertiary);
+      border-color: var(--accent);
+      box-shadow: 0 15px 40px rgba(201, 169, 94, 0.25);
+    }
+
+    .menu-item:active {
+      transform: translateY(-4px) scale(0.98);
+    }
+
+    .menu-icon {
+      font-size: 2.5rem;
+    }
+
+    .menu-item p {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .products-dropdown {
+      margin: 2rem 0;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .dropdown-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-header:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .dropdown-arrow {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+
+    .dropdown-arrow.open {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-icon {
+      font-size: 1.8rem;
+    }
+
+    .dropdown-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .dropdown-content {
+      display: none;
+      background: var(--bg-tertiary);
+      border-top: 2px solid var(--border);
+    }
+
+    .dropdown-content.open {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: var(--bg-secondary);
+      padding-left: 2.5rem;
+    }
+
+    .dropdown-item-bullet {
+      font-size: 1.2rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .dropdown-item-text {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .orders-container {
+      display: none;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+    }
+
+    .orders-container.logged-in {
+      display: block;
+    }
+
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .orders-header h1 {
+      color: var(--accent);
+      font-size: 2rem;
+    }
+
+    .orders-toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(201, 169, 94, 0.2);
+    }
+
+    .search-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .search-btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .export-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .export-btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .status-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .status-card {
+      background: white;
+      border: 3px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .status-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .status-card.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .status-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .status-count {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .status-all {
+      color: #3b82f6;
+    }
+
+    .status-new {
+      color: var(--accent);
+    }
+
+    .status-preparation {
+      color: #1e3a8a;
+    }
+
+    .status-delivery {
+      color: #0d9488;
+    }
+
+    .status-completed {
+      color: #16a34a;
+    }
+
+    .status-cancelled {
+      color: #e74c3c;
+    }
+
+    .reports-container {
+      display: none;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+    }
+
+    .reports-container.logged-in {
+      display: block;
+    }
+
+    .reports-header {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .reports-header .check-icon {
+      color: #10b981;
+      font-size: 1.5rem;
+    }
+
+    .reports-header .header-text {
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .reports-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .time-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .time-filter-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--border);
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .time-filter-btn.active {
+      background: #8b5cf6;
+      color: white;
+      border-color: #8b5cf6;
+    }
+
+    .time-filter-btn:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .export-excel-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .export-excel-btn:hover {
+      background: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .alert-banner {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .alert-icon {
+      color: #f59e0b;
+      font-size: 1.5rem;
+    }
+
+    .alert-text {
+      color: #92400e;
+      font-weight: 500;
+    }
+
+    .kpi-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .kpi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .kpi-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .kpi-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .kpi-change {
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .kpi-change.positive {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .kpi-change.negative {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .kpi-sales {
+      border-left: 4px solid #3b82f6;
+    }
+
+    .kpi-profit {
+      border-left: 4px solid #10b981;
+    }
+
+    .kpi-orders {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .kpi-growth {
+      border-left: 4px solid #8b5cf6;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Audio Element for Notifications -->
+  <audio id="notification-sound" preload="auto"></audio>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Admin Dashboard Menu -->
+  <div class="admin-dashboard" id="admin-dashboard">
+    <div class="dashboard-header">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">Welcome to Staccs Management Panel</p>
+      </div>
+      <button id="logout-btn-dash" class="logout-btn">Logout</button>
+    </div>
+
+    <!-- Stats Dashboard Cards -->
+    <div class="stats-dashboard">
+      <div class="stats-card stats-card-revenue">
+        <div class="stats-card-icon">💰</div>
+        <div class="stats-card-content">
+          <div class="stats-card-label">Total Revenue</div>
+          <div class="stats-card-value" id="stat-revenue">EGP 0</div>
+          <div class="stats-card-desc">From completed orders</div>
+        </div>
+      </div>
+
+      <div class="stats-card stats-card-orders">
+        <div class="stats-card-icon">📦</div>
+        <div class="stats-card-content">
+          <div class="stats-card-label">New Orders</div>
+          <div class="stats-card-value" id="stat-new-orders">0</div>
+          <div class="stats-card-desc">Awaiting processing</div>
+        </div>
+      </div>
+
+      <div class="stats-card stats-card-products">
+        <div class="stats-card-icon">🛍️</div>
+        <div class="stats-card-content">
+          <div class="stats-card-label">Total Products</div>
+          <div class="stats-card-value" id="stat-products">0</div>
+          <div class="stats-card-desc">Available in store</div>
+        </div>
+      </div>
+
+      <div class="stats-card stats-card-rate">
+        <div class="stats-card-icon">📈</div>
+        <div class="stats-card-content">
+          <div class="stats-card-label">Success Rate</div>
+          <div class="stats-card-value" id="stat-success-rate">0%</div>
+          <div class="stats-card-desc">Completed vs cancelled</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-item" onclick="navigateToSection('customers')">
+        <div class="menu-icon">👥</div>
+        <p>Customers</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('reports')">
+        <div class="menu-icon">📊</div>
+        <p>Reports</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('discount')">
+        <div class="menu-icon">🏷️</div>
+        <p>Discount</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('shipping')">
+        <div class="menu-icon">🚚</div>
+        <p>Shipping</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('contact')">
+        <div class="menu-icon">💭</div>
+        <p>Contact Us</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('block')">
+        <div class="menu-icon">🚫</div>
+        <p>Block Buyer</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('reviews')">
+        <div class="menu-icon">⭐</div>
+        <p>Buyer Reviews</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('settings')">
+        <div class="menu-icon">🏪</div>
+        <p>Store Settings</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('payments')">
+        <div class="menu-icon">📋</div>
+        <p>Payments</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('designs')">
+        <div class="menu-icon">✏️</div>
+        <p>Designs</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('delivery')">
+        <div class="menu-icon">🚚</div>
+        <p>Delivery</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('services')">
+        <div class="menu-icon">🔗</div>
+        <p>Services</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('loyalty')">
+        <div class="menu-icon">⭐</div>
+        <p>Loyalty Points</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('inbox')">
+        <div class="menu-icon">💬</div>
+        <p>Inbox</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('employees')">
+        <div class="menu-icon">👔</div>
+        <p>Employees</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('log')">
+        <div class="menu-icon">🔄</div>
+        <p>Update Log</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('subscribe')">
+        <div class="menu-icon">⊕</div>
+        <p>Subscribe</p>
+      </div>
+
+      <div class="menu-item" onclick="navigateToSection('orders')">
+        <div class="menu-icon">📦</div>
+        <p>Orders</p>
+      </div>
+    </div>
+
+    <hr style="border: none; border-top: 2px solid var(--border); margin: 3rem 0;">
+    <a href="#" onclick="navigateToSection('products'); return false;" class="cta-btn"
+      style="display: inline-block; margin-top: 1rem;">Manage Products</a>
+
+    <!-- Contact Us Management Modal -->
+    <div id="contact-modal" class="cart-modal">
+      <div class="cart-content" style="max-width: 600px; border: 2px solid var(--accent); background: #111;">
+        <span class="close" id="close-contact-btn">&times;</span>
+        <h2 style="color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+          <span>💭</span> Contact Us Setup
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Configure social media profile links and contact information.</p>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; padding: 1rem; background: #080808; border: 1px dashed var(--accent); border-radius: 12px; align-items: flex-end;">
+          <div style="flex: 1;">
+            <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 5px;">Platform (Name)</label>
+            <input type="text" id="new-contact-name" placeholder="WhatsApp" style="width: 100%; padding: 12px; border-radius: 8px; background: #181818; color: #fff; border: 1px solid #333;">
+          </div>
+          <div style="flex: 2;">
+            <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 5px;">Profile URL (Link)</label>
+            <input type="url" id="new-contact-link" placeholder="https://..." style="width: 100%; padding: 12px; border-radius: 8px; background: #181818; color: #fff; border: 1px solid #333;">
+          </div>
+          <button onclick="addNewContactToTable()" class="cta-btn" style="padding: 12px 20px; border-radius: 8px; font-weight: 700;">Add</button>
+        </div>
+
+        <div style="max-height: 350px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid #333; border-radius: 8px;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background: #181818; position: sticky; top: 0;">
+              <tr style="border-bottom: 2px solid #222;">
+                <th style="padding: 12px; color: var(--accent); font-size: 0.9rem;">Platform</th>
+                <th style="padding: 12px; color: var(--accent); font-size: 0.9rem;">Link Address</th>
+                <th style="padding: 12px; color: var(--accent); font-size: 0.9rem; text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="contact-links-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        
+        <button id="save-contact-links-btn" class="cta-btn" style="width: 100%; padding: 15px; font-weight: 700;">Save All Links</button>
+      </div>
+    </div>
+    <p style="text-align: center; color: var(--text-secondary); margin-top: 3rem; font-size: 0.85rem; padding-bottom: 2rem; opacity: 0.7;">&copy; 2024 staccs.eg | Prepared by Eng Mohamed Basha</p>
+  </div>
+
+  <!-- Admin Product Management Section -->
+  <div class="admin-container" id="admin-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <h1>Staccs Admin - Manage Products</h1>
+      <div>
+        <button onclick="navigateToSection('dashboard')" style="background: var(--accent); margin-right: 0.5rem;">Back
+          to Dashboard</button>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+      </div>
+    </div>
+    <a href="index.html" class="cta-btn">View Site</a>
+
+    <!-- Products Dropdown Menu -->
+    <div class="products-dropdown">
+      <div class="dropdown-header" onclick="toggleProductsDropdown()">
+        <span class="dropdown-arrow">▼</span>
+        <span class="dropdown-icon">📋</span>
+        <span class="dropdown-title">Products</span>
+      </div>
+      <div class="dropdown-content">
+        <div class="dropdown-item" onclick="scrollToForm()">
+          <span class="dropdown-item-bullet">○</span>
+          <span class="dropdown-item-text">Add New Product</span>
+        </div>
+        <div class="dropdown-item" onclick="scrollToList()">
+          <span class="dropdown-item-bullet">○</span>
+          <span class="dropdown-item-text">Product List</span>
+        </div>
+        <div class="dropdown-item" onclick="navigateToSection('inventory')">
+          <span class="dropdown-item-bullet">○</span>
+          <span class="dropdown-item-text">Inventory Management</span>
+        </div>
+      </div>
+    </div>
+
+    <form id="product-form" class="product-form">
+      <input type="hidden" id="product-id">
+      <select id="category">
+        <option value="Necklaces">Necklaces</option>
+        <option value="Rings">Rings</option>
+        <option value="Bracelets">Bracelets</option>
+        <option value="Watches">Watches</option>
+      </select>
+      <input type="text" id="name" placeholder="Product Name" required>
+      <input type="number" id="price" placeholder="Price (EGP)" required>
+      <input type="number" id="quantity" placeholder="Quantity in Stock" min="0" required>
+      <div style="flex-direction: column; align-items: flex-start; gap: 0.8rem; display: flex; background: rgba(0,0,0,0.1); padding: 1rem; border-radius: 10px; border: 1px dashed var(--border);">
+        <label style="color: var(--accent); font-size: 0.85rem; font-weight: 700;">PRO-GALLERY: PRODUCT IMAGES (MULTIPLE)</label>
+        <div style="display: flex; width: 100%; gap: 1rem; align-items: center;">
+             <input type="file" id="image" accept="image/*" multiple style="flex: 1; color: var(--text-secondary);">
+             <div id="upload-status" style="display:none; color: var(--accent); font-weight: bold; font-size: 0.85rem; align-items: center; gap: 8px;">
+               <div class="spinner-small"></div>
+               <span id="upload-text">Processing Photos...</span>
+             </div>
+        </div>
+        <div id="image-previews-container" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 5px; min-height: 20px;">
+          <!-- Images appear here after selection -->
+        </div>
+      </div>
+      <textarea id="description" placeholder="Description"></textarea>
+      <button type="submit">Add / Update Product</button>
+    </form>
+    <div id="product-list" class="product-list"></div>
+  </div>
+
+  <!-- Orders Management Section -->
+  <div class="orders-container" id="orders-container">
+    <div class="orders-header">
+      <div>
+        <h1>Order Management</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">E-Commerce Order Tracking System</p>
+      </div>
+      <div>
+        <button onclick="navigateToSection('dashboard')" style="background: var(--accent); margin-right: 0.5rem;">Back
+          to Dashboard</button>
+        <button id="logout-btn-orders" class="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <!-- Search and Export Tools -->
+    <div class="orders-toolbar">
+      <button class="export-btn">
+        <span>📊</span>
+        <span>Export to Excel</span>
+      </button>
+      <div class="search-bar">
+        <input type="text" class="search-input" id="search-input"
+          placeholder="Search by: phone number, invoice number, email, date, or name">
+        <button class="search-btn">Search</button>
+      </div>
+    </div>
+
+    <!-- Order Status Cards -->
+    <div class="status-cards">
+      <div class="status-card active" onclick="filterByStatus('all')">
+        <div class="status-label status-all">All</div>
+        <div class="status-count">0</div>
+      </div>
+      <div class="status-card" onclick="filterByStatus('new')">
+        <div class="status-label status-new">New Orders</div>
+        <div class="status-count">0</div>
+      </div>
+      <div class="status-card" onclick="filterByStatus('preparation')">
+        <div class="status-label status-preparation">In Preparation</div>
+        <div class="status-count">0</div>
+      </div>
+      <div class="status-card" onclick="filterByStatus('delivery')">
+        <div class="status-label status-delivery">Out for Delivery</div>
+        <div class="status-count">0</div>
+      </div>
+      <div class="status-card" onclick="filterByStatus('completed')">
+        <div class="status-label status-completed">Completed</div>
+        <div class="status-count">0</div>
+      </div>
+      <div class="status-card" onclick="filterByStatus('cancelled')">
+        <div class="status-label status-cancelled">Cancelled</div>
+        <div class="status-count">0</div>
+      </div>
+    </div>
+    <div id="orders-list" style="margin-top: 1.5rem; display: grid; gap: 1rem;"></div>
+  </div>
+
+  <!-- Reports Section -->
+  <div class="reports-container" id="reports-container">
+    <div class="reports-header">
+      <div>
+        <h1>Product Reports</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">Graphical and Financial Summary of Performance</p>
+      </div>
+      <div>
+        <button onclick="navigateToSection('dashboard')" style="background: var(--accent); margin-right: 0.5rem;">Back
+          to Dashboard</button>
+        <button id="logout-btn-reports" class="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <!-- Information and Filtering Bar -->
+    <div class="reports-header">
+      <span class="check-icon">✓</span>
+      <span class="header-text">Report includes only completed orders, excluding pending or canceled orders</span>
+    </div>
+
+    <div class="reports-toolbar">
+      <div class="time-filters">
+        <button class="time-filter-btn active" onclick="filterByTime('week')">Week</button>
+        <button class="time-filter-btn" onclick="filterByTime('month')">Month</button>
+        <button class="time-filter-btn" onclick="filterByTime('2months')">2 Months</button>
+        <button class="time-filter-btn" onclick="filterByTime('3months')">3 Months</button>
+        <button class="time-filter-btn" onclick="filterByTime('6months')">6 Months</button>
+        <button class="time-filter-btn" onclick="filterByTime('year')">Year</button>
+      </div>
+      <button class="export-excel-btn">
+        <span>📊</span>
+        <span>Export Excel</span>
+      </button>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <span class="alert-icon">🔔</span>
+      <span class="alert-text">Add 'actual cost price' to obtain accurate profit figures and AI recommendations</span>
+    </div>
+
+    <!-- Performance Cards (KPIs) -->
+    <div class="kpi-cards">
+      <div class="kpi-card kpi-sales">
+        <div class="kpi-value">0 EGP</div>
+        <div class="kpi-label">Total Sales</div>
+        <div class="kpi-change positive">+0% from last period</div>
+      </div>
+      <div class="kpi-card kpi-profit">
+        <div class="kpi-value">0 EGP</div>
+        <div class="kpi-label">Net Profit</div>
+        <div class="kpi-change positive">+0% from last period</div>
+      </div>
+      <div class="kpi-card kpi-orders">
+        <div class="kpi-value">0</div>
+        <div class="kpi-label">Completed Orders</div>
+        <div class="kpi-change positive">+0% from last period</div>
+      </div>
+      <div class="kpi-card kpi-growth">
+        <div class="kpi-value">0%</div>
+        <div class="kpi-label">Growth Rate</div>
+        <div class="kpi-change positive">+0% from last period</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Management Modal -->
+  <div id="delivery-modal" class="cart-modal">
+    <div class="cart-content" style="max-width: 600px; border: 2px solid var(--accent);">
+      <span class="close" id="close-delivery-btn">&times;</span>
+      <h2 style="color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🚚</span> Shipping Management
+      </h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Update shipping rates for each
+        governorate. Changes reflect instantly on checkout.</p>
+
+      <!-- Add New Governorate Section -->
+      <div
+        style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-primary); border: 1px dashed var(--accent); border-radius: 12px; align-items: flex-end;">
+        <div style="flex: 2;">
+          <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">New Governorate
+            Name</label>
+          <input type="text" id="new-gov-name" placeholder="e.g. Mansoura"
+            style="width: 100%; padding: 0.6rem; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border);">
+        </div>
+        <div style="flex: 1;">
+          <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">Price
+            (EGP)</label>
+          <input type="number" id="new-gov-price" placeholder="40"
+            style="width: 100%; padding: 0.6rem; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border);">
+        </div>
+        <button onclick="addNewGovToTable()" class="cta-btn"
+          style="padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700;">Add</button>
+      </div>
+
+      <div
+        style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead style="background: var(--bg-tertiary); position: sticky; top: 0;">
+            <tr style="border-bottom: 2px solid var(--border);">
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem;">Governorate</th>
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem;">Price (EGP)</th>
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem; text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="shipping-rates-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <button id="save-shipping-rates-btn" class="cta-btn" style="width: 100%; padding: 1rem; font-weight: 700;">Save
+        Rates</button>
+    </div>
+  </div>
+
+  <!-- Contact Us Management Modal -->
+  <div id="contact-modal" class="cart-modal">
+    <div class="cart-content" style="max-width: 600px; border: 2px solid var(--accent);">
+      <span class="close" id="close-contact-btn">&times;</span>
+      <h2 style="color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💭</span> Contact Us Links
+      </h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Manage social media and contact
+        links shown on the website footer and contact sections.</p>
+
+      <!-- Add New Contact Link Section -->
+      <div
+        style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-primary); border: 1px dashed var(--accent); border-radius: 12px; align-items: flex-end;">
+        <div style="flex: 1;">
+          <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">Platform
+            Name</label>
+          <input type="text" id="new-contact-name" placeholder="e.g. Instagram"
+            style="width: 100%; padding: 0.6rem; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border);">
+        </div>
+        <div style="flex: 2;">
+          <label style="color: var(--accent); font-size: 0.8rem; display: block; margin-bottom: 0.3rem;">Link /
+            URL</label>
+          <input type="url" id="new-contact-link" placeholder="https://instagram.com/..."
+            style="width: 100%; padding: 0.6rem; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border);">
+        </div>
+        <button onclick="addNewContactToTable()" class="cta-btn"
+          style="padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700;">Add</button>
+      </div>
+
+      <div
+        style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead style="background: var(--bg-tertiary); position: sticky; top: 0;">
+            <tr style="border-bottom: 2px solid var(--border);">
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem;">Platform</th>
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem;">Public Link</th>
+              <th style="padding: 1rem; color: var(--accent); font-size: 0.9rem; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="contact-links-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <button id="save-contact-links-btn" class="cta-btn" style="width: 100%; padding: 1rem; font-weight: 700;">Save All
+        Links</button>
+    </div>
+  </div>
+
+  <!-- Firebase modules are now naturally imported in admin.js -->
+  <script type="module" src="admin.js"></script>
+  <script>
+    const adminDashboard = document.getElementById('admin-dashboard');
+    const adminPanel = document.getElementById('admin-panel');
+
+    // Navigate to different sections
+    window.navigateToSection = (section) => {
+      if (section === 'products') {
+        adminDashboard.classList.remove('logged-in');
+        adminPanel.classList.add('logged-in');
+        loadProducts();
+      } else if (section === 'dashboard') {
+        adminDashboard.classList.add('logged-in');
+        adminPanel.classList.remove('logged-in');
+        document.getElementById('orders-container').classList.remove('logged-in');
+        document.getElementById('reports-container').classList.remove('logged-in');
+      } else if (section === 'orders') {
+        adminDashboard.classList.remove('logged-in');
+        adminPanel.classList.remove('logged-in');
+        document.getElementById('orders-container').classList.add('logged-in');
+        document.getElementById('reports-container').classList.remove('logged-in');
+        if (typeof loadOrders === 'function') {
+          loadOrders();
+        }
+      } else if (section === 'reports') {
+        adminDashboard.classList.remove('logged-in');
+        adminPanel.classList.remove('logged-in');
+        document.getElementById('orders-container').classList.remove('logged-in');
+        document.getElementById('reports-container').classList.add('logged-in');
+      } else if (section === 'inventory') {
+        alert('Inventory Management\n\nThis feature will be implemented soon!');
+      } else if (section === 'shipping') {
+        if (typeof openDeliveryModal === 'function') {
+          openDeliveryModal();
+        } else {
+          alert('Shipping module loading...');
+        }
+      } else if (section === 'contact') {
+        if (typeof openContactModal === 'function') {
+          openContactModal();
+        } else {
+          alert('Contact module loading...');
+        }
+      } else {
+        alert(`Section: ${section.charAt(0).toUpperCase() + section.slice(1)}\n\nThis feature will be implemented soon!`);
+      }
+    };
+
+    // Filter orders by status is handled by admin.js
+    // Filter reports by time period is handled by admin.js
+
+    // Toggle products dropdown
+    window.toggleProductsDropdown = () => {
+      const content = document.querySelector('.dropdown-content');
+      const arrow = document.querySelector('.dropdown-arrow');
+      content.classList.toggle('open');
+      arrow.classList.toggle('open');
+    };
+
+    // Scroll to product form
+    window.scrollToForm = () => {
+      const form = document.getElementById('product-form');
+      form.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('name').focus();
+    };
+
+    // Scroll to product list
+    window.scrollToList = () => {
+      const list = document.getElementById('product-list');
+      list.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Firebase handles checking login status natively now inside admin.js!
+  </script>
+</body>
+
+</html>

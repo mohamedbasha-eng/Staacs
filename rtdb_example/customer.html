@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Shop | Realtime DB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1>Customer Shop 🛍️</h1>
+        <p style="color: var(--text-secondary);">Browse dynamic real-time data directly fed from Firebase.</p>
+        <span style="display:inline-block; margin-top: 10px; font-size: 0.9em; background: rgba(59, 130, 246, 0.2); color: var(--primary-color); padding: 5px 15px; border-radius: 20px;">
+            Changes on the Admin page will appear here immediately! No reload needed.
+        </span>
+    </div>
+
+    <div id="loading" class="loader"></div>
+
+    <!-- Product Cards container injected with JS -->
+    <div class="products-grid" id="productsGrid"></div>
+
+    <script type="module" src="customer.js"></script>
+</body>
+</html>

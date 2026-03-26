@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "category": "Necklaces",
+    "name": "Minimal Chain Necklace",
+    "price": 299,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Chain+Necklace",
+    "description": "Elegant stainless steel chain with subtle pendant. Custom engraving available."
+  },
+  {
+    "id": 2,
+    "category": "Necklaces",
+    "name": "Bold Link Necklace",
+    "price": 450,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Link+Necklace",
+    "description": "Interlocking stainless steel links for a modern look."
+  },
+  {
+    "id": 3,
+    "category": "Rings",
+    "name": "Signature Ring",
+    "price": 199,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Signature+Ring",
+    "description": "Stackable stainless steel ring, fade-proof."
+  },
+  {
+    "id": 4,
+    "category": "Rings",
+    "name": "Engraved Ring",
+    "price": 250,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Engraved+Ring",
+    "description": "Personalized engraving on premium steel."
+  },
+  {
+    "id": 5,
+    "category": "Bracelets",
+    "name": "Cuff Bracelet",
+    "price": 350,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Cuff+Bracelet",
+    "description": "Bold cuff design, adjustable."
+  },
+  {
+    "id": 6,
+    "category": "Bracelets",
+    "name": "Chain Bracelet",
+    "price": 280,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Chain+Bracelet",
+    "description": "Delicate chain with clasp."
+  },
+  {
+    "id": 7,
+    "category": "Watches",
+    "name": "Minimal Watch",
+    "price": 1200,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Minimal+Watch",
+    "description": "Stainless steel case, minimalist dial."
+  },
+  {
+    "id": 8,
+    "category": "Watches",
+    "name": "Chronograph Watch",
+    "price": 1500,
+    "image": "https://placehold.co/400x400/1a1a1a/ffffff?text=Chronograph",
+    "description": "Multi-function chronograph."
+  }
+]
